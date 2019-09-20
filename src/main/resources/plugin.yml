@@ -1,0 +1,7 @@
+name: EventTracer
+version: ${project.version}
+main: de.ialistannen.eventtracer.EventTracer
+api-version: 1.13
+authors: [I_Al_Istannen]
+description: Allows tracing event modifications
+website: https.//ialistannen.de
