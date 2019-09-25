@@ -14,11 +14,4 @@ public interface ProxiedEvent {
    * @return all actions that were applied to the event
    */
   List<AuditableAction> getActions();
-
-//  /**
-//   * Adds an auditable action.
-//   *
-//   * @param action the action to add
-//   */
-//  void addAction(AuditableAction action);
 }
