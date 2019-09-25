@@ -1,5 +1,6 @@
-package de.ialistannen.eventtracer.transform;
+package de.ialistannen.eventtracer.transform.eventclasses;
 
+import de.ialistannen.eventtracer.util.ObjectInstantiator;
 import java.lang.reflect.Field;
 import sun.misc.Unsafe;
 

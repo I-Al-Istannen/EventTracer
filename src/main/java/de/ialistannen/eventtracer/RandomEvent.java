@@ -11,6 +11,16 @@ public class RandomEvent extends Event {
     return handlers;
   }
 
+  private int number;
+
+  public int getNumber() {
+    return number;
+  }
+
+  public void setNumber(int number) {
+    this.number = number;
+  }
+
   @Override
   public HandlerList getHandlers() {
     return handlers;

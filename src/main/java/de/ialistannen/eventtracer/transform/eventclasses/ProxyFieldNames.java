@@ -1,4 +1,4 @@
-package de.ialistannen.eventtracer.transform;
+package de.ialistannen.eventtracer.transform.eventclasses;
 
 /**
  * Contains the names of the proxy fields.

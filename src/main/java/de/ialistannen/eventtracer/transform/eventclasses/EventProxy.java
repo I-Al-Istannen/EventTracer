@@ -1,7 +1,9 @@
-package de.ialistannen.eventtracer.transform;
+package de.ialistannen.eventtracer.transform.eventclasses;
 
 import de.ialistannen.eventtracer.reflect.FieldByFieldCopy;
 import de.ialistannen.eventtracer.util.MethodSignature;
+import de.ialistannen.eventtracer.util.ObjectInstantiator;
+import de.ialistannen.eventtracer.util.ProxiedEvent;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -21,6 +23,8 @@ import org.bukkit.event.Event;
 
 /**
  * The base class for creating even proxies.
+ *
+ * <p><br><strong>{@link #clearCache()} must be called in onDisable!</strong></p>
  */
 public class EventProxy {
 
@@ -115,5 +119,14 @@ public class EventProxy {
     } catch (ReflectiveOperationException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  /**
+   * Clears all cached instrumented classes.
+   *
+   * <p><br><strong>Must be called in onDisable!</strong></p>
+   */
+  public static void clearCache() {
+    eventCache = new ConcurrentHashMap<>();
   }
 }

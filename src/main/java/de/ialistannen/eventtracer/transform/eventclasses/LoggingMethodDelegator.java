@@ -1,4 +1,4 @@
-package de.ialistannen.eventtracer.transform;
+package de.ialistannen.eventtracer.transform.eventclasses;
 
 import de.ialistannen.eventtracer.audit.AuditableAction;
 import de.ialistannen.eventtracer.util.MethodSignature;
