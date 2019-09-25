@@ -70,6 +70,10 @@ public class LoggingMethodDelegator {
     for (StackTraceElement element : elements) {
       try {
         ClassLoader classLoader = Class.forName(element.getClassName()).getClassLoader();
+        // Loaded by bootstrap
+        if (classLoader == null) {
+          return null;
+        }
         if (classLoader.getClass().getSimpleName().equalsIgnoreCase("PluginClassLoader")) {
           Field pluginField = classLoader.getClass().getDeclaredField("plugin");
           pluginField.setAccessible(true);
