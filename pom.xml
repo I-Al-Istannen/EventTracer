@@ -17,6 +17,7 @@
   <properties>
     <java.version>1.8</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <byte-buddy.version>1.10.1</byte-buddy.version>
   </properties>
 
   <build>
@@ -102,14 +103,20 @@
     <dependency>
       <groupId>net.bytebuddy</groupId>
       <artifactId>byte-buddy</artifactId>
-      <version>1.10.1</version>
+      <version>${byte-buddy.version}</version>
     </dependency>
 
     <!-- https://mvnrepository.com/artifact/net.bytebuddy/byte-buddy-agent -->
     <dependency>
       <groupId>net.bytebuddy</groupId>
       <artifactId>byte-buddy-agent</artifactId>
-      <version>1.10.1</version>
+      <version>${byte-buddy.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.objenesis</groupId>
+      <artifactId>objenesis</artifactId>
+      <version>3.0.1</version>
     </dependency>
 
   </dependencies>

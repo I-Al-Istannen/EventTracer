@@ -1,4 +1,4 @@
-package de.ialistannen.eventtracer.util;
+package de.ialistannen.eventtracer.util.instantiate;
 
 /**
  * Creates instances of objects.

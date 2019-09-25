@@ -2,8 +2,9 @@ package de.ialistannen.eventtracer.transform.eventclasses;
 
 import de.ialistannen.eventtracer.reflect.FieldByFieldCopy;
 import de.ialistannen.eventtracer.util.MethodSignature;
-import de.ialistannen.eventtracer.util.ObjectInstantiator;
 import de.ialistannen.eventtracer.util.ProxiedEvent;
+import de.ialistannen.eventtracer.util.instantiate.ObjectInstantiator;
+import de.ialistannen.eventtracer.util.instantiate.ObjenesisInstantiator;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ import net.bytebuddy.implementation.MethodDelegation;
 import org.bukkit.event.Event;
 
 /**
- * The base class for creating even proxies.
+ * The base class for creating event proxies.
  *
  * <p><br><strong>{@link #clearCache()} must be called in onDisable!</strong></p>
  */
@@ -33,7 +34,7 @@ public class EventProxy {
    */
   private static Map<String, Class<? extends Event>> eventCache = new ConcurrentHashMap<>();
 
-  private ObjectInstantiator objectInstantiator = new UnsafeInstantiator();
+  private ObjectInstantiator objectInstantiator = new ObjenesisInstantiator();
 
   /**
    * Wraps an event in a {@link ProxiedEvent}.
