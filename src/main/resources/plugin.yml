@@ -5,3 +5,8 @@ api-version: 1.13
 authors: [I_Al_Istannen]
 description: Allows tracing event modifications
 website: https.//ialistannen.de
+commands:
+  watch:
+    permission: "eventtracer.watch"
+    usage: "This usage should not be displayed"
+    description: "Watch or unwatch certain events"

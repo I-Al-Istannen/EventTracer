@@ -15,7 +15,17 @@ import org.bukkit.event.Event;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
+/**
+ * The main event tracer command that allows you to watch and unwatch an event.
+ */
 public class EventTracerCommand implements CommandExecutor, TabCompleter {
+
+  private final InteractiveListener listener;
+
+  public EventTracerCommand(Plugin plugin) {
+    this.listener = new InteractiveListener();
+    Bukkit.getPluginManager().registerEvents(listener, plugin);
+  }
 
   @Override
   public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -23,6 +33,27 @@ public class EventTracerCommand implements CommandExecutor, TabCompleter {
       sender.sendMessage(ChatColor.RED + "Usage: " + label + " <event to watch>");
       return true;
     }
+
+    try {
+      Class<?> theClass = Class.forName(args[0]);
+
+      if (!Event.class.isAssignableFrom(theClass)) {
+        sender.sendMessage(ChatColor.RED + "That is no event class :(");
+        return true;
+      }
+
+      @SuppressWarnings("unchecked")
+      Class<? extends Event> asEventClass = (Class<? extends Event>) theClass;
+
+      if(listener.toggleAuditEvent(sender, asEventClass)) {
+        sender.sendMessage(ChatColor.GREEN + "You are now watching for that event.");
+      } else {
+        sender.sendMessage(ChatColor.RED + "You are no longer watching for that event.");
+      }
+    } catch (ClassNotFoundException e) {
+      sender.sendMessage(ChatColor.RED + "Class not found :/");
+    }
+
     return true;
   }
 
