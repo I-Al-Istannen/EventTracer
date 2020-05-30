@@ -11,8 +11,8 @@ public class AuditEvent extends Event {
 
   private static final HandlerList handlerList = new HandlerList();
 
-  private List<AuditableAction> actions;
-  private Event sourceEvent;
+  private final List<AuditableAction> actions;
+  private final Event sourceEvent;
 
   /**
    * Creates a new audit event.

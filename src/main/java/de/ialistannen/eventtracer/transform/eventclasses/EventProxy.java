@@ -34,7 +34,7 @@ public class EventProxy {
    */
   private static Map<String, Class<? extends Event>> eventCache = new ConcurrentHashMap<>();
 
-  private ObjectInstantiator objectInstantiator = new ObjenesisInstantiator();
+  private final ObjectInstantiator objectInstantiator = new ObjenesisInstantiator();
 
   /**
    * Wraps an event in a {@link ProxiedEvent}.

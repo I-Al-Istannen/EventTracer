@@ -16,6 +16,7 @@ import org.bukkit.plugin.Plugin;
  * A byte buddy method call delegator that logs information into the {@link ProxyFieldNames#ACTIONS}
  * field.
  */
+@SuppressWarnings("unused")
 public class LoggingMethodDelegator {
 
   /**

@@ -9,9 +9,9 @@ import java.util.Objects;
  */
 public class MethodSignature {
 
-  private String name;
-  private Class<?> returnValue;
-  private Class<?>[] parameter;
+  private final String name;
+  private final Class<?> returnValue;
+  private final Class<?>[] parameter;
 
   /**
    * Creates a new signature for a given method.
