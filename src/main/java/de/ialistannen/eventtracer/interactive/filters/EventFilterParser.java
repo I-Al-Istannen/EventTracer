@@ -109,6 +109,11 @@ public class EventFilterParser {
     if (!parser.isPresent()) {
       throw new ParseException(stringReader, "Unknown attribute '" + name + "'");
     }
+
+    if (!parser.get().isApplicable(eventClass)) {
+      throw new ParseException(stringReader, "The filter can not be applied to this event!");
+    }
+
     return parser.get();
   }
 

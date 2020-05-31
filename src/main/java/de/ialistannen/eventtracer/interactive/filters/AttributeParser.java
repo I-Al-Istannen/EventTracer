@@ -11,9 +11,10 @@ import org.bukkit.event.Event;
 public interface AttributeParser<T extends Event> {
 
   /**
-   * @return the class the filter can be applied to
+   * @param event the event to check
+   * @return true if the filter can be applied.
    */
-  Class<T> applicableClass();
+  boolean isApplicable(Class<? extends Event> event);
 
   /**
    * @param input the input string reader to parse from. You must consume it fully, everything

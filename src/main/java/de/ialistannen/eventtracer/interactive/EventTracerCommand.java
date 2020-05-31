@@ -1,6 +1,9 @@
 package de.ialistannen.eventtracer.interactive;
 
+import de.ialistannen.eventtracer.interactive.filters.AttributeParserCollection;
 import de.ialistannen.eventtracer.interactive.filters.EventFilterParser;
+import de.ialistannen.eventtracer.interactive.filters.defaults.ChatEventFilters;
+import de.ialistannen.eventtracer.interactive.filters.defaults.PlayerEventFilters;
 import de.ialistannen.eventtracer.util.parsing.ParseException;
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -28,6 +31,9 @@ public class EventTracerCommand implements CommandExecutor, TabCompleter {
   public EventTracerCommand(Plugin plugin) {
     this.listener = new InteractiveListener();
     Bukkit.getPluginManager().registerEvents(listener, plugin);
+
+    PlayerEventFilters.registerDefaults(AttributeParserCollection.getInstance());
+    ChatEventFilters.registerDefaults(AttributeParserCollection.getInstance());
   }
 
   @Override
