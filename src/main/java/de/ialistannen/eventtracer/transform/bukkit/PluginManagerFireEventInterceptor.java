@@ -2,6 +2,7 @@ package de.ialistannen.eventtracer.transform.bukkit;
 
 import de.ialistannen.eventtracer.transform.eventclasses.ProxyFieldNames;
 import java.util.List;
+import java.util.logging.Level;
 import net.bytebuddy.asm.Advice;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
@@ -23,6 +24,17 @@ public class PluginManagerFireEventInterceptor {
 
     // we are operating under the bukkit class loader, which does not know any plugins
     Plugin plugin = Bukkit.getPluginManager().getPlugin("EventTracer");
+    if (plugin == null || !plugin.isEnabled()) {
+      String message = "EventTracer not found or not enabled but entry hook persisted, ignoring "
+          + argument.getClass().getName() + "!";
+      if (plugin != null) {
+        plugin.getLogger().log(Level.FINE, message);
+      } else {
+        System.out.println(message);
+      }
+      return argument;
+    }
+
     ClassLoader pluginClassLoader = plugin.getClass().getClassLoader();
     Class<?> eventProxy = pluginClassLoader.loadClass(
         "de.ialistannen.eventtracer.transform.eventclasses.EventProxy"
@@ -45,6 +57,16 @@ public class PluginManagerFireEventInterceptor {
 
     // we are operating under the bukkit class loader, which does not know any plugins
     Plugin plugin = Bukkit.getPluginManager().getPlugin("EventTracer");
+    if (plugin == null || !plugin.isEnabled()) {
+      String message = "EventTracer not found or not enabled but exit hook persisted, ignoring "
+          + event.getClass().getName() + "!";
+      if (plugin != null) {
+        plugin.getLogger().log(Level.FINE, message);
+      } else {
+        System.out.println(message);
+      }
+      return;
+    }
     ClassLoader pluginClassLoader = plugin.getClass().getClassLoader();
     Class<?> auditEventClass = pluginClassLoader.loadClass(
         "de.ialistannen.eventtracer.audit.AuditEvent"
