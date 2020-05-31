@@ -1,3 +1,5 @@
+[![Build Status](https://ci.ialistannen.de/buildStatus/icon?job=EventTracer)](https://ci.ialistannen.de/job/EventTracer/)
+
 # About
 
 This is a simple plugin which instruments the `SimplePluginManager#fireEvent` method using ByteBuddy. It then intercepts any fired event, replaces it with a dynamically generated proxy that logs method calls and hands it off.
