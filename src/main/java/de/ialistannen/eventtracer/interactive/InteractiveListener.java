@@ -2,13 +2,15 @@ package de.ialistannen.eventtracer.interactive;
 
 import de.ialistannen.eventtracer.audit.AuditEvent;
 import de.ialistannen.eventtracer.audit.AuditableAction;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
-import java.util.Set;
+import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
@@ -26,7 +28,7 @@ import org.bukkit.plugin.Plugin;
  */
 public class InteractiveListener implements Listener {
 
-  private final Map<CommandSender, Set<Class<? extends Event>>> interestingEvents;
+  private final Map<CommandSender, List<FilteredEvent<? extends Event>>> interestingEvents;
 
   public InteractiveListener() {
     this.interestingEvents = new HashMap<>();
@@ -37,18 +39,24 @@ public class InteractiveListener implements Listener {
    *
    * @param sender the sender to send messages to
    * @param theClass the event class to watch or unwatch
+   * @param filter a filter to apply
    * @return true if the sender is now watching the event
    */
-  public boolean toggleAuditEvent(CommandSender sender, Class<? extends Event> theClass) {
+  public <T extends Event> boolean toggleAuditEvent(CommandSender sender, Class<T> theClass,
+      Predicate<T> filter) {
     boolean watching;
-    interestingEvents.putIfAbsent(sender, new HashSet<>());
-    Set<Class<? extends Event>> watchedEvents = interestingEvents.get(sender);
+    interestingEvents.putIfAbsent(sender, new ArrayList<>());
+    List<FilteredEvent<? extends Event>> watchedEvents = interestingEvents.get(sender);
 
-    if (watchedEvents.contains(theClass)) {
-      watchedEvents.remove(theClass);
+    Optional<FilteredEvent<? extends Event>> filteredEvent = watchedEvents.stream()
+        .filter(it -> it.clazz == theClass)
+        .findFirst();
+
+    if (filteredEvent.isPresent()) {
+      watchedEvents.remove(filteredEvent.get());
       watching = false;
     } else {
-      watchedEvents.add(theClass);
+      watchedEvents.add(new FilteredEvent<>(theClass, filter));
       watching = true;
     }
 
@@ -61,10 +69,11 @@ public class InteractiveListener implements Listener {
 
   @EventHandler
   public void onAuditEvent(AuditEvent event) {
-    for (Entry<CommandSender, Set<Class<? extends Event>>> entry : interestingEvents.entrySet()) {
-      if (entry.getValue().contains(event.getSourceEvent().getClass())) {
-        notifyPlayer(entry.getKey(), event);
-      }
+    for (Entry<CommandSender, List<FilteredEvent<? extends Event>>> entry : interestingEvents.entrySet()) {
+      entry.getValue()
+          .stream()
+          .filter(filteredEvent -> filteredEvent.test(event.getSourceEvent()))
+          .forEach(filteredEvent -> notifyPlayer(entry.getKey(), event));
     }
   }
 
@@ -119,5 +128,21 @@ public class InteractiveListener implements Listener {
         ChatColor.RED + "<" + ChatColor.AQUA + "%s" + ChatColor.RED + "> " + ChatColor.DARK_GRAY
             + "%s"
     );
+  }
+
+  private static class FilteredEvent<T extends Event> implements Predicate<Event> {
+
+    private final Class<T> clazz;
+    private final Predicate<T> filter;
+
+    FilteredEvent(Class<T> clazz, Predicate<T> filter) {
+      this.clazz = clazz;
+      this.filter = filter;
+    }
+
+    @Override
+    public boolean test(Event event) {
+      return event.getClass() == clazz && filter.test(clazz.cast(event));
+    }
   }
 }

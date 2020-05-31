@@ -1,9 +1,12 @@
 package de.ialistannen.eventtracer.interactive;
 
+import de.ialistannen.eventtracer.interactive.filters.EventFilterParser;
+import de.ialistannen.eventtracer.util.parsing.ParseException;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -35,26 +38,30 @@ public class EventTracerCommand implements CommandExecutor, TabCompleter {
     }
 
     try {
-      Class<?> theClass = Class.forName(args[0]);
+      EventFilterParser parser = new EventFilterParser(String.join(" ", args));
+      Predicate<Event> predicate = parser.parse();
 
-      if (!Event.class.isAssignableFrom(theClass)) {
-        sender.sendMessage(ChatColor.RED + "That is no event class :(");
-        return true;
-      }
-
-      @SuppressWarnings("unchecked")
-      Class<? extends Event> asEventClass = (Class<? extends Event>) theClass;
-
-      if(listener.toggleAuditEvent(sender, asEventClass)) {
+      if (toggleAuditEvent(sender, predicate, parser.getEventClass())) {
         sender.sendMessage(ChatColor.GREEN + "You are now watching for that event.");
       } else {
         sender.sendMessage(ChatColor.RED + "You are no longer watching for that event.");
       }
-    } catch (ClassNotFoundException e) {
-      sender.sendMessage(ChatColor.RED + "Class not found :/");
+    } catch (ParseException e) {
+      sender.sendMessage(e.getMessage());
     }
 
     return true;
+  }
+
+  private <T extends Event> boolean toggleAuditEvent(CommandSender sender,
+      Predicate<Event> predicate, Class<? extends Event> clazz) {
+
+    @SuppressWarnings("unchecked")
+    Class<T> theClass = (Class<T>) clazz;
+    @SuppressWarnings("unchecked")
+    Predicate<T> thePredicate = (Predicate<T>) predicate;
+
+    return listener.toggleAuditEvent(sender, theClass, thePredicate);
   }
 
   @Override
