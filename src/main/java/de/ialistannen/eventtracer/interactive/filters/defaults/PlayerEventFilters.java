@@ -5,6 +5,8 @@ import de.ialistannen.eventtracer.interactive.filters.AttributeParserCollection;
 import java.util.regex.Pattern;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.Event;
+import org.bukkit.event.block.BlockEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityEvent;
 import org.bukkit.event.entity.PlayerLeashEntityEvent;
@@ -39,6 +41,7 @@ public class PlayerEventFilters {
     parser.addExtractor(PlayerLeashEntityEvent.class, PlayerLeashEntityEvent::getEntity);
     parser.addExtractor(TabCompleteEvent.class, TabCompleteEvent::getSender);
     parser.addExtractor(EntityEvent.class, EntityEvent::getEntity);
+    parser.addExtractor(BlockPlaceEvent.class, BlockPlaceEvent::getPlayer);
 
     return parser;
   }
