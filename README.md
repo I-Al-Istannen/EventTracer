@@ -1,6 +1,6 @@
 # About
 
-This is a simple plugin which instruments the `SimplePluginManager#fireEvent` method using ByteBuddy. It then intercepts any fired event, replaces it with a dynamically generated proxy that logs method calls and hands it of.
+This is a simple plugin which instruments the `SimplePluginManager#fireEvent` method using ByteBuddy. It then intercepts any fired event, replaces it with a dynamically generated proxy that logs method calls and hands it off.
 
 Finally, after `fireEvent` is done, it reports the results (method calls) in its own `AuditEvent`.
 This enables you to easily debug what plugins are messing with your event and what they are doing.
@@ -14,6 +14,8 @@ This enables you to easily debug what plugins are messing with your event and wh
 The log is printed *before* the chat message, so the first Message `Ha` did not
 trigger a print, as it was filtered.
 ![AsyncPlayerChat](media/DemoAsyncPlayerChat.png)
+Note how you can clearly see the calls to `setFormat` with the two placeholders
+and formatting as seen in the chat message below.
 
 
 ## Caveats and Problems
