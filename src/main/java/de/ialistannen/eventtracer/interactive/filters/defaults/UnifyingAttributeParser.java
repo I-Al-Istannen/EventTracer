@@ -40,8 +40,8 @@ public class UnifyingAttributeParser<T, I> implements AttributeParser<Event> {
    * @param <E> the type of the class the extractor is for
    */
   public <E extends Event> void addExtractor(Class<E> clazz, Function<E, I> extractor) {
-    @SuppressWarnings({"unchecked", "RedundantCast"})
-    Entry<Event, I> entry = (Entry<Event, I>) Entry.of(clazz, extractor);
+    @SuppressWarnings({"unchecked"})
+    Entry<Event, I> entry = (Entry<Event, I>) new Entry<>(clazz, extractor);
 
     this.extractors.add(entry);
   }
@@ -69,7 +69,7 @@ public class UnifyingAttributeParser<T, I> implements AttributeParser<Event> {
     };
   }
 
-  public static class Entry<E, U> {
+  private static class Entry<E, U> {
 
     private final Class<E> clazz;
     private final Function<E, U> extractor;
@@ -86,9 +86,6 @@ public class UnifyingAttributeParser<T, I> implements AttributeParser<Event> {
     private Class<E> getClazz() {
       return clazz;
     }
-
-    public static <E extends Event, U> Entry<E, U> of(Class<E> clazz, Function<E, U> extractor) {
-      return new Entry<>(clazz, extractor);
-    }
   }
+
 }
