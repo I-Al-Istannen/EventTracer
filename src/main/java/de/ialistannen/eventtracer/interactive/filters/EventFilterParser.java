@@ -42,7 +42,6 @@ public class EventFilterParser {
     stringReader.readWhile(Character::isWhitespace);
 
     if (!stringReader.canRead()) {
-      System.out.println("Returning instance of " + eventClass);
       return event -> eventClass.isAssignableFrom(event.getClass());
     }
 

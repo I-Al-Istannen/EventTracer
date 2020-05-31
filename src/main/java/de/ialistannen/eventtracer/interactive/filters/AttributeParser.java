@@ -23,27 +23,4 @@ public interface AttributeParser<T extends Event> {
    * @throws ParseException if the attribute could not be parsed
    */
   Predicate<T> parse(StringReader input) throws ParseException;
-
-  /**
-   * @param other the other parser
-   * @return a parser that applies this parser and, if it fails, the other one.
-   */
-  default AttributeParser<T> or(AttributeParser<T> other) {
-    return new AttributeParser<T>() {
-      @Override
-      public boolean isApplicable(Class<? extends Event> event) {
-        return AttributeParser.this.isApplicable(event) || other.isApplicable(event);
-      }
-
-      @Override
-      public Predicate<T> parse(StringReader input) throws ParseException {
-        StringReader copiedInput = input.copy();
-        try {
-          return AttributeParser.this.parse(copiedInput);
-        } catch (ParseException e) {
-          return other.parse(input);
-        }
-      }
-    };
-  }
 }
