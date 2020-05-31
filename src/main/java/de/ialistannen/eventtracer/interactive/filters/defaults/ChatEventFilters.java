@@ -1,8 +1,7 @@
 package de.ialistannen.eventtracer.interactive.filters.defaults;
 
-import static de.ialistannen.eventtracer.interactive.filters.defaults.StringFilters.regexFind;
-
 import de.ialistannen.eventtracer.interactive.filters.AttributeParserCollection;
+import java.util.regex.Pattern;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerEvent;
 
@@ -17,21 +16,15 @@ public class ChatEventFilters {
    * @param collection the collection to register them to
    */
   public static void registerDefaults(AttributeParserCollection collection) {
-    collection.addParser("chat-message-content", messageContent());
-    collection.addParser("chat-message-format", messageFormat());
+    UnifyingAttributeParser<Pattern, String> parser = new UnifyingAttributeParser<>(
+        reader -> Pattern.compile(reader.readRemaining()),
+        (pattern, string) -> pattern.matcher(string).find()
+    );
+    parser.addExtractor(AsyncPlayerChatEvent.class, AsyncPlayerChatEvent::getFormat);
+    parser.addExtractor(AsyncPlayerChatEvent.class, AsyncPlayerChatEvent::getMessage);
+
+    collection.addParser("chat-message-content", parser);
+    collection.addParser("chat-message-format", parser);
   }
 
-  private static SubclassFilter<AsyncPlayerChatEvent> messageContent() {
-    return new SubclassFilter<>(
-        AsyncPlayerChatEvent.class,
-        stringReader -> regexFind(AsyncPlayerChatEvent::getMessage, stringReader.readRemaining())
-    );
-  }
-
-  private static SubclassFilter<AsyncPlayerChatEvent> messageFormat() {
-    return new SubclassFilter<>(
-        AsyncPlayerChatEvent.class,
-        stringReader -> regexFind(AsyncPlayerChatEvent::getFormat, stringReader.readRemaining())
-    );
-  }
 }
