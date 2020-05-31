@@ -142,7 +142,7 @@ public class InteractiveListener implements Listener {
 
     @Override
     public boolean test(Event event) {
-      return event.getClass() == clazz && filter.test(clazz.cast(event));
+      return clazz.isInstance(event) && filter.test(clazz.cast(event));
     }
   }
 }
