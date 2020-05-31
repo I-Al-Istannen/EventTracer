@@ -2,6 +2,7 @@ package de.ialistannen.eventtracer.interactive;
 
 import de.ialistannen.eventtracer.interactive.filters.AttributeParserCollection;
 import de.ialistannen.eventtracer.interactive.filters.EventFilterParser;
+import de.ialistannen.eventtracer.interactive.filters.defaults.BlockEventFilters;
 import de.ialistannen.eventtracer.interactive.filters.defaults.ChatEventFilters;
 import de.ialistannen.eventtracer.interactive.filters.defaults.PlayerEventFilters;
 import de.ialistannen.eventtracer.util.parsing.ParseException;
@@ -34,6 +35,7 @@ public class EventTracerCommand implements CommandExecutor, TabCompleter {
 
     PlayerEventFilters.registerDefaults(AttributeParserCollection.getInstance());
     ChatEventFilters.registerDefaults(AttributeParserCollection.getInstance());
+    BlockEventFilters.registerDefaults(AttributeParserCollection.getInstance());
   }
 
   @Override
