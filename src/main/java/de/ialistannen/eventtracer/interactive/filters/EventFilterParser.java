@@ -67,6 +67,10 @@ public class EventFilterParser {
     while (stringReader.canRead() && stringReader.peek() != '}') {
       attributes.add(parseFilterAttribute());
       stringReader.readWhile(Character::isWhitespace);
+      if (stringReader.peek() == ',') {
+        stringReader.assertRead(",");
+        stringReader.readWhile(Character::isWhitespace);
+      }
     }
 
     return attributes;
