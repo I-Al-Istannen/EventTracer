@@ -17,7 +17,7 @@
   <properties>
     <java.version>1.8</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <byte-buddy.version>1.10.1</byte-buddy.version>
+    <byte-buddy.version>1.10.10</byte-buddy.version>
   </properties>
 
   <build>
@@ -43,11 +43,7 @@
               <goal>shade</goal>
             </goals>
             <configuration>
-              <artifactSet>
-                <includes>
-                  <include>net.bytebuddy:byte-buddy:*</include>
-                </includes>
-              </artifactSet>
+              <finalName>${project.name}</finalName>
               <createDependencyReducedPom>false</createDependencyReducedPom>
             </configuration>
           </execution>
@@ -77,12 +73,6 @@
     <dependency>
       <groupId>org.spigotmc</groupId>
       <artifactId>spigot-api</artifactId>
-      <version>1.14.4-R0.1-SNAPSHOT</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.spigotmc</groupId>
-      <artifactId>spigot</artifactId>
       <version>1.14.4-R0.1-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
