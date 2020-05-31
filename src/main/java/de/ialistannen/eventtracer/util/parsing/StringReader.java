@@ -39,6 +39,13 @@ public class StringReader {
   }
 
   /**
+   * @return a copy of this string reader
+   */
+  public StringReader copy() {
+    return new StringReader(getUnderlying(), getPosition());
+  }
+
+  /**
    * Returns true if there is more to read.
    *
    * @return true if there is more to read

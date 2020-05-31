@@ -1,8 +1,8 @@
 package de.ialistannen.eventtracer.interactive.filters.defaults;
 
 import de.ialistannen.eventtracer.interactive.filters.AttributeParser;
-import de.ialistannen.eventtracer.util.parsing.AtomicParser;
 import de.ialistannen.eventtracer.util.parsing.ParseException;
+import de.ialistannen.eventtracer.util.parsing.StatelessParser;
 import de.ialistannen.eventtracer.util.parsing.StringReader;
 import java.util.function.Predicate;
 import org.bukkit.event.Event;
@@ -16,9 +16,9 @@ import org.bukkit.event.Event;
 public class SubclassFilter<T extends Event> implements AttributeParser<Event> {
 
   private final Class<T> targetClass;
-  private final AtomicParser<Predicate<T>> parser;
+  private final StatelessParser<Predicate<T>> parser;
 
-  public SubclassFilter(Class<T> targetClass, AtomicParser<Predicate<T>> parser) {
+  public SubclassFilter(Class<T> targetClass, StatelessParser<Predicate<T>> parser) {
     this.targetClass = targetClass;
     this.parser = parser;
   }
