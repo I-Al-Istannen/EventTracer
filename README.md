@@ -10,6 +10,12 @@ This enables you to easily debug what plugins are messing with your event and wh
 * Logs all calls to *non final methods*. This is a sad limitation, but the dynamically generated subclass can not overwrite the final method sadly.
 * Provides an event with the source event and a list of all method calls (containing the method, the parameters, the plugin and the stacktrace)
 
+## Screenshots
+The log is printed *before* the chat message, so the first Message `Ha` did not
+trigger a print, as it was filtered.
+![AsyncPlayerChat](media/DemoAsyncPlayerChat.png)
+
+
 ## Caveats and Problems
 * As said before, final methods are not tracked
 * It uses Objenesis for instantiating objects (so that should be fine)
@@ -22,6 +28,3 @@ This enables you to easily debug what plugins are messing with your event and wh
     - We can not add fields, so the original source event needs to be stored in some central Map-like collection
     - We are fundamentally messing with classes and redefine bukkit/other plugin's stuff. This will probably not cause problems, but it is quite invasive.
     - This still does not solve the final field problem., but it could make it better: If all methods are redirected to the original, final fields can not escape and their values should not matter at all.
-
-## Sample output
-![Output](https://i.imgur.com/QUrrY79.png)
