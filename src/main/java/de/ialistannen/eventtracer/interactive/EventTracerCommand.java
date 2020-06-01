@@ -6,10 +6,7 @@ import de.ialistannen.eventtracer.interactive.filters.defaults.BlockEventFilters
 import de.ialistannen.eventtracer.interactive.filters.defaults.ChatEventFilters;
 import de.ialistannen.eventtracer.interactive.filters.defaults.PlayerEventFilters;
 import de.ialistannen.eventtracer.util.parsing.ParseException;
-import java.lang.reflect.Field;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
@@ -20,7 +17,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.event.Event;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * The main event tracer command that allows you to watch and unwatch an event.
@@ -75,29 +71,8 @@ public class EventTracerCommand implements CommandExecutor, TabCompleter {
   @Override
   public List<String> onTabComplete(CommandSender sender, Command command, String alias,
       String[] args) {
-    return Arrays.stream(Bukkit.getPluginManager().getPlugins())
-        .flatMap(it -> getLoadedEvents(it).stream())
-        .filter(it -> args.length == 0 || it.getSimpleName().startsWith(args[0]))
-        .map(Class::getCanonicalName)
+    return LoadedEventsHelper.getEventClasses().stream()
+        .filter(it -> args.length == 0 || it.contains(args[0]))
         .collect(Collectors.toList());
-  }
-
-  private List<Class<?>> getLoadedEvents(Plugin plugin) {
-    try {
-      Field classLoaderField = JavaPlugin.class.getDeclaredField("classLoader");
-      classLoaderField.setAccessible(true);
-      Object pluginClassLoader = classLoaderField.get(plugin);
-
-      Field classesField = pluginClassLoader.getClass().getDeclaredField("classes");
-      classesField.setAccessible(true);
-      @SuppressWarnings("unchecked")
-      Map<String, Class<?>> classes = (Map<String, Class<?>>) classesField.get(pluginClassLoader);
-
-      return classes.values().stream()
-          .filter(Event.class::isAssignableFrom)
-          .collect(Collectors.toList());
-    } catch (NoSuchFieldException | IllegalAccessException e) {
-      throw new RuntimeException(e);
-    }
   }
 }

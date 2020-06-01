@@ -1,6 +1,7 @@
 package de.ialistannen.eventtracer;
 
 import de.ialistannen.eventtracer.interactive.EventTracerCommand;
+import de.ialistannen.eventtracer.interactive.LoadedEventsHelper;
 import de.ialistannen.eventtracer.transform.bukkit.PluginManagerFireEventInterceptor;
 import de.ialistannen.eventtracer.transform.eventclasses.EventProxy;
 import java.lang.instrument.Instrumentation;
@@ -30,6 +31,8 @@ public final class EventTracer extends JavaPlugin implements org.bukkit.event.Li
       getPluginLoader().disablePlugin(this);
       return;
     }
+
+    LoadedEventsHelper.scan(this);
 
     if (System.getProperty(RELOAD_MARKER) == null) {
       Instrumentation instrumentation = ByteBuddyAgent.install();
