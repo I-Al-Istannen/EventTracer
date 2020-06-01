@@ -1,7 +1,9 @@
 package de.ialistannen.eventtracer;
 
-import de.ialistannen.eventtracer.interactive.EventTracerCommand;
+import de.ialistannen.eventtracer.interactive.InteractiveListener;
+import de.ialistannen.eventtracer.interactive.ListWatchesCommand;
 import de.ialistannen.eventtracer.interactive.LoadedEventsHelper;
+import de.ialistannen.eventtracer.interactive.WatchCommand;
 import de.ialistannen.eventtracer.transform.bukkit.PluginManagerFireEventInterceptor;
 import de.ialistannen.eventtracer.transform.eventclasses.EventProxy;
 import java.lang.instrument.Instrumentation;
@@ -55,7 +57,9 @@ public final class EventTracer extends JavaPlugin implements org.bukkit.event.Li
       getLogger().log(Level.INFO, "Reload detected - Not instrumenting classes");
     }
 
-    Objects.requireNonNull(getCommand("watch")).setExecutor(new EventTracerCommand(this));
+    InteractiveListener listener = new InteractiveListener();
+    Objects.requireNonNull(getCommand("watch")).setExecutor(new WatchCommand(this, listener));
+    Objects.requireNonNull(getCommand("listWatches")).setExecutor(new ListWatchesCommand(listener));
   }
 
   @Override

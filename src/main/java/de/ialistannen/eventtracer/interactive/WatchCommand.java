@@ -21,13 +21,14 @@ import org.bukkit.plugin.Plugin;
 /**
  * The main event tracer command that allows you to watch and unwatch an event.
  */
-public class EventTracerCommand implements CommandExecutor, TabCompleter {
+public class WatchCommand implements CommandExecutor, TabCompleter {
 
   private final InteractiveListener listener;
 
-  public EventTracerCommand(Plugin plugin) {
-    this.listener = new InteractiveListener();
-    Bukkit.getPluginManager().registerEvents(listener, plugin);
+  public WatchCommand(Plugin plugin, InteractiveListener listener) {
+    this.listener = listener;
+
+    Bukkit.getPluginManager().registerEvents(this.listener, plugin);
 
     PlayerEventFilters.registerDefaults(AttributeParserCollection.getInstance());
     ChatEventFilters.registerDefaults(AttributeParserCollection.getInstance());

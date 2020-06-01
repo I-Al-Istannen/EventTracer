@@ -4,6 +4,7 @@ import de.ialistannen.eventtracer.audit.AuditEvent;
 import de.ialistannen.eventtracer.audit.AuditableAction;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +25,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 
 /**
- * A listener for audit events tied to an {@link EventTracerCommand}.
+ * A listener for audit events tied to an {@link WatchCommand}.
  */
 public class InteractiveListener implements Listener {
 
@@ -32,6 +33,17 @@ public class InteractiveListener implements Listener {
 
   public InteractiveListener() {
     this.interestingEvents = new HashMap<>();
+  }
+
+  /**
+   * @param sender the sender to return them for
+   * @return all events you are watching
+   */
+  public List<Class<? extends Event>> getWatchedEventClasses(CommandSender sender) {
+    return interestingEvents.getOrDefault(sender, Collections.emptyList())
+        .stream()
+        .map(it -> it.clazz)
+        .collect(Collectors.toList());
   }
 
   /**

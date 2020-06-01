@@ -10,3 +10,7 @@ commands:
     permission: "eventtracer.watch"
     usage: "This usage should not be displayed"
     description: "Watch or unwatch certain events"
+  listWatches:
+    permission: "eventtracer.watch"
+    usage: "This usage should not be displayed"
+    description: "Shows what events you are currently watching"
