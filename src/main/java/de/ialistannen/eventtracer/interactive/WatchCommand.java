@@ -72,8 +72,9 @@ public class WatchCommand implements CommandExecutor, TabCompleter {
   @Override
   public List<String> onTabComplete(CommandSender sender, Command command, String alias,
       String[] args) {
+    String filter = args.length == 0 ? "" : args[0].toLowerCase();
     return LoadedEventsHelper.getEventClasses().stream()
-        .filter(it -> args.length == 0 || it.contains(args[0]))
+        .filter(it -> it.toLowerCase().contains(filter))
         .collect(Collectors.toList());
   }
 }
