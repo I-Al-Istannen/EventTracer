@@ -20,7 +20,6 @@ import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 
@@ -132,14 +131,6 @@ public class InteractiveListener implements Listener {
   @EventHandler(priority = EventPriority.MONITOR)
   public void onPlayerLeave(PlayerQuitEvent event) {
     interestingEvents.remove(event.getPlayer());
-  }
-
-  @EventHandler
-  public void onPlayerChat(AsyncPlayerChatEvent event) {
-    event.setFormat(
-        ChatColor.RED + "<" + ChatColor.AQUA + "%s" + ChatColor.RED + "> " + ChatColor.DARK_GRAY
-            + "%s"
-    );
   }
 
   private static class FilteredEvent<T extends Event> implements Predicate<Event> {
