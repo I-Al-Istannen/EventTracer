@@ -47,19 +47,6 @@
               <createDependencyReducedPom>false</createDependencyReducedPom>
             </configuration>
           </execution>
-          <execution>
-            <id>distribute</id>
-            <phase>package</phase>
-            <goals>
-              <goal>shade</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>
-                /home/i_al_istannen/general_storage/Minecraft/Servers/1.12.2/plugins/update
-              </outputDirectory>
-              <finalName>${project.name}</finalName>
-            </configuration>
-          </execution>
         </executions>
       </plugin>
     </plugins>
