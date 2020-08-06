@@ -7,7 +7,7 @@ import org.bukkit.event.HandlerList;
 /**
  * Called after a event was processed containing the event history.
  */
-public class AuditEvent extends Event {
+public abstract class AuditEvent extends Event {
 
   private static final HandlerList handlerList = new HandlerList();
 
@@ -19,8 +19,10 @@ public class AuditEvent extends Event {
    *
    * @param actions the actions
    * @param sourceEvent the source event
+   * @param async true if the event is async
    */
-  public AuditEvent(List<AuditableAction> actions, Event sourceEvent) {
+  public AuditEvent(List<AuditableAction> actions, Event sourceEvent, boolean async) {
+    super(async);
     this.actions = actions;
     this.sourceEvent = sourceEvent;
   }

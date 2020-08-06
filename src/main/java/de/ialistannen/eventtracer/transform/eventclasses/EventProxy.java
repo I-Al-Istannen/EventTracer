@@ -47,9 +47,12 @@ public class EventProxy {
   public Event wrap(Event original, ClassLoader targetClassLoader) {
     String canonicalName = original.getClass().getCanonicalName();
 
+    String proxyName = original.getClass().getSimpleName() + "_IAlEventProxy"
+        + (original.isAsynchronous() ? "_Async" : "_Sync");
+
     eventCache.computeIfAbsent(
         canonicalName,
-        ignored -> buildProxyClass(original.getClass(), targetClassLoader)
+        ignored -> buildProxyClass(original.getClass(), targetClassLoader, proxyName)
     );
 
     Class<? extends Event> proxyClass = eventCache.get(canonicalName);
@@ -58,10 +61,10 @@ public class EventProxy {
   }
 
   private <T extends Event> Class<? extends T> buildProxyClass(Class<T> eventClass,
-      ClassLoader loader) {
+      ClassLoader loader, String name) {
     DynamicType.Builder<T> buddy = new ByteBuddy()
         .subclass(eventClass)
-        .name(eventClass.getSimpleName() + "_IAlEventProxy")
+        .name(name)
         .implement(ProxiedEvent.class)
         .defineField(
             ProxyFieldNames.ORIGINAL,

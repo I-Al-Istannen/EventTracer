@@ -18,7 +18,10 @@ public class PluginManagerFireEventInterceptor {
   public static Event enter(@Advice.Argument(value = 0, readOnly = false) Event argument)
       throws Exception {
     // No infinite loop today
-    if (argument.getClass().getName().equals("de.ialistannen.eventtracer.audit.AuditEvent")) {
+    if (argument.getClass().getName().equals("de.ialistannen.eventtracer.audit.SyncAuditEvent")) {
+      return argument;
+    }
+    if (argument.getClass().getName().equals("de.ialistannen.eventtracer.audit.AsyncAuditEvent")) {
       return argument;
     }
 
@@ -51,7 +54,10 @@ public class PluginManagerFireEventInterceptor {
   @Advice.OnMethodExit
   public static void exit(@Advice.Enter Event event) throws Exception {
     // No infinite loop today
-    if (event.getClass().getName().equals("de.ialistannen.eventtracer.audit.AuditEvent")) {
+    if (event.getClass().getName().equals("de.ialistannen.eventtracer.audit.SyncAuditEvent")) {
+      return;
+    }
+    if (event.getClass().getName().equals("de.ialistannen.eventtracer.audit.AsyncAuditEvent")) {
       return;
     }
 
@@ -68,11 +74,19 @@ public class PluginManagerFireEventInterceptor {
       return;
     }
     ClassLoader pluginClassLoader = plugin.getClass().getClassLoader();
-    Class<?> auditEventClass = pluginClassLoader.loadClass(
-        "de.ialistannen.eventtracer.audit.AuditEvent"
-    );
     List<?> actions = (List<?>) event.getClass().getField(ProxyFieldNames.ACTIONS).get(event);
     Event originalEvent = (Event) event.getClass().getField(ProxyFieldNames.ORIGINAL).get(event);
+
+    Class<?> auditEventClass;
+    if (originalEvent.isAsynchronous()) {
+      auditEventClass = pluginClassLoader.loadClass(
+          "de.ialistannen.eventtracer.audit.AsyncAuditEvent"
+      );
+    } else {
+      auditEventClass = pluginClassLoader.loadClass(
+          "de.ialistannen.eventtracer.audit.SyncAuditEvent"
+      );
+    }
 
     Event auditEvent = (Event) auditEventClass
         .getConstructor(List.class, Event.class)
