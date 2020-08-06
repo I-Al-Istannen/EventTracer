@@ -45,7 +45,7 @@ public final class EventTracer extends JavaPlugin implements org.bukkit.event.Li
           .type(ElementMatchers.named(SimplePluginManager.class.getCanonicalName()))
           .transform(
               new ForAdvice().advice(
-                  ElementMatchers.named("fireEvent"),
+                  ElementMatchers.named("callEvent"),
                   PluginManagerFireEventInterceptor.class.getCanonicalName()
               )
                   .include(getClassLoader(), Bukkit.class.getClassLoader())
